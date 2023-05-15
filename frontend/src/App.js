@@ -1,6 +1,9 @@
 import './App.css';
+import React, { useContext } from 'react';
+import activityContext from './activityContext';
 
 function App() {
+  const { activity, getAll, getByType, resetActivity } = useContext(activityContext);
   return (
     <div className='App'>
       <div className='navbar'>
@@ -15,48 +18,34 @@ function App() {
       </div>
       <div>
         <div className='controls'>
-          <button>Get All</button>
+          <button onClick={() => getAll()}>Get All</button>
           <div className='controls-input'>
             <input placeholder='eg: music' />
-            <button>Search</button>{' '}
+            <button onClick={() => getByType()}>Search</button>{' '}
           </div>
-          <button>Reset</button>
+          <button onClick={() => resetActivity()}>Reset</button>
         </div>
+        {activity.isLoading && <div>Loading</div>}
+        {activity.isError && <div>Something went wrong</div>}
+        {!activity.isLoading && !activity.isError &&
         <div className='results'>
           <div className='row'>
-            <div className='column'>
-              <div className='card'>
-                <h3>Card 1</h3>
-                <p>Some text</p>
-                <p>Some text</p>
+            {activity.data.map((item) => (
+              <div
+                className='column'
+                key={item.key}>
+                <div className='card'>
+                  <h3>{item.activity}</h3>
+                  <p>type: {item.type}</p>
+                  <p>participants: {item.participants}</p>
+                  <p>price: {item.price}</p>
+                  <p>link: {item.link}</p>
+                  <p>accessibility: {item.accessibility}</p>
+                </div>
               </div>
-            </div>
-
-            <div className='column'>
-              <div className='card'>
-                <h3>Card 2</h3>
-                <p>Some text</p>
-                <p>Some text</p>
-              </div>
-            </div>
-
-            <div className='column'>
-              <div className='card'>
-                <h3>Card 3</h3>
-                <p>Some text</p>
-                <p>Some text</p>
-              </div>
-            </div>
-
-            <div className='column'>
-              <div className='card'>
-                <h3>Card 4</h3>
-                <p>Some text</p>
-                <p>Some text</p>
-              </div>
-            </div>
+            ))}
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );
