@@ -46,20 +46,26 @@ function App() {
 
         {!activity.isLoading && !activity.isError && (
           <div className='results'>
-            <div className='row'>
+            <div className='results-container'>
               {activity.data.activities?.map((item) => (
                 <div
-                  className='column'
+                  className='results-wrapper'
                   key={item.key}>
                   <div className='card'>
                     <h3>{item.activity}</h3>
-                    <p>type: {item.type}</p>
-                    <p>participants: {item.participants}</p>
-                    <p>price: {item.price}</p>
+                    <p>Type: {item.type}</p>
+                    <p>Participants: {item.participants}</p>
+                    <p>Price: {item.price}</p>
                     <p>
-                      link: <a href={item.link}>{item.link}</a>
+                      Link:{' '}
+                      <a
+                        href={item.link}
+                        target='_blank'
+                        rel='noreferrer'>
+                        {item.link}
+                      </a>
                     </p>
-                    <p>accessibility: {item.accessibility}</p>
+                    <p>Accessibility: {item.accessibility}</p>
                   </div>
                 </div>
               ))}
