@@ -11,11 +11,9 @@ router.post('/', async (req, res) => {
     axios
       .get(`https://www.boredapi.com/api/activity`)
       .then((response) => {
-        console.log(response.data);
         Activity.create(response.data);
       })
       .catch((error) => {
-        console.log('Error fetching data');
         res.status(401).json({ message: 'Error fetching data' });
       });
   }
@@ -23,7 +21,7 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const type = req.body.type;
+  const type = req.query.type;
   var condition = type ? { type: type } : {};
 
   const activities = await Activity.find(condition);

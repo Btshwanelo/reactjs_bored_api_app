@@ -6,86 +6,71 @@ const activityContext = createContext();
 //Contex Provider used to encapsulate only the components that needs the state in this context
 export const ActivityProvider = ({ children }) => {
   const [activity, setActivity] = useState({
-    data: [
-      {
-        activity: 'Configure two-factor authentication on your accounts',
-        type: 'busywork',
-        participants: 1,
-        price: 0,
-        link: 'https://en.wikipedia.org/wiki/Multi-factor_authentication',
-        key: '1572120',
-        accessibility: 0,
-      },
-    ],
+    data: [],
     isError: false,
     isLoading: false,
+    error: ''
   });
 
   //Get latest data from bored API and write to MongoDB
-  const resetActivity = () => {
+  const syncData = () => {
     setActivity.isLoading = true;
 
-    axios.get().then().catch();
-
-    return setActivity({
-      data: [
-        {
-          activity: 'Configure two-factor authentication on your accounts',
-          type: 'busywork',
-          participants: 1,
-          price: 0,
-          link: 'https://en.wikipedia.org/wiki/Multi-factor_authentication',
-          key: '1572120',
-          accessibility: 0,
-        },
-      ],
-      isError: false,
-      isLoading: false,
-    });
+    axios
+      .post(`http://localhost:8000/api`)
+      .then((res) => {
+        setActivity({
+          data: [],
+          isError: false,
+          isLoading: false,
+          error: ''
+        });
+      })
+      .catch((err) => {
+        return setActivity({
+          data: [],
+          isError: true,
+          isLoading: false,
+          error: 'Somethin went wrong'
+        });
+      });
   };
 
   //Get all records from MongoDB
-  const getAll = () => {
-    console.log('get all');
+  const getData = (type) => {
     setActivity.isLoading = true;
-    return setActivity({
-      data: [
-        {
-          activity: 'Configure two-factor authentication on your accounts',
-          type: 'busywork',
-          participants: 1,
-          price: 0,
-          link: 'https://en.wikipedia.org/wiki/Multi-factor_authentication',
-          key: '1572120',
-          accessibility: 5,
-        },
-      ],
-      isError: false,
-      isLoading: false,
-    });
+    const condition = type ? { params: { type: type } } : {};
+
+    axios
+      .get(`http://localhost:8000/api`, condition)
+      .then((res) => {
+        if (res.count === 0) {
+          setActivity({
+            data: res.data,
+            isError: false,
+            isLoading: false,
+            error: 'Not found',
+          });
+        } else {
+          setActivity({
+            data: res.data,
+            isError: false,
+            isLoading: false,
+            error: '',
+          });
+        }
+      })
+      .catch((err) => {
+        return setActivity({
+          data: [],
+          isError: true,
+          isLoading: false,
+          error: 'Something went wrong',
+        });
+      });
   };
 
-  //Get records from MongoDB by type
-  const getByType = () => {
-    setActivity.isLoading = true;
-    return setActivity({
-      data: [
-        {
-          activity: 'Configure two-factor authentication on your accounts',
-          type: 'busywork',
-          participants: 1,
-          price: 0,
-          link: 'https://en.wikipedia.org/wiki/Multi-factor_authentication',
-          key: '1572120',
-          accessibility: 3,
-        },
-      ],
-      isError: false,
-      isLoading: false,
-    });
-  };
-
-  return <activityContext.Provider value={{ activity, getAll, getByType, resetActivity }}>{children}</activityContext.Provider>;
+  return <activityContext.Provider value={{ activity, getData, syncData }}>{children}</activityContext.Provider>;
 };
 
 export default activityContext;

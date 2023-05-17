@@ -1,9 +1,17 @@
 import './App.css';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import activityContext from './activityContext';
 
 function App() {
-  const { activity, getAll, getByType, resetActivity } = useContext(activityContext);
+  const { activity, getData, syncData } = useContext(activityContext);
+
+  const [type, setType] = useState('');
+
+  console.log(activity);
+
+  const handleChange = (e) => {
+    setType(e.target.value);
+  };
   return (
     <div className='App'>
       <div className='navbar'>
@@ -18,19 +26,23 @@ function App() {
       </div>
       <div>
         <div className='controls'>
-          <button onClick={() => getAll()}>Get All</button>
+          <button onClick={() => getData()}>Get All</button>
           <div className='controls-input'>
-            <input placeholder='eg: music' />
-            <button onClick={() => getByType()}>Search</button>{' '}
+            <input
+              placeholder='eg: music'
+              value={type}
+              onChange={handleChange}
+            />
+            <button onClick={() => getData(type)}>Search</button>{' '}
           </div>
-          <button onClick={() => resetActivity()}>Reset</button>
+          <button onClick={() => syncData()}>Reset</button>
         </div>
         {activity.isLoading && <div>Loading</div>}
-        {activity.isError && <div>Something went wrong</div>}
+        {activity.isError && <div>{activity.error}</div>}
         {!activity.isLoading && !activity.isError && (
           <div className='results'>
             <div className='row'>
-              {activity.data.map((item) => (
+              {activity.data.activities?.map((item) => (
                 <div
                   className='column'
                   key={item.key}>
