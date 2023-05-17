@@ -18,7 +18,7 @@ app.use(cors());
 
 app.use('/api', activityRoutes);
 
-//not found
+//Not found
 app.use((req, res, next) => {
   const error = new Error(`Not Found - ${req.originalUrl}`);
   res.status(404);

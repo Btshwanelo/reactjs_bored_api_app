@@ -4,12 +4,18 @@ import axios from 'axios';
 
 const router = express.Router();
 
+const http = 'https://www.boredapi.com/api/activity';
+
+// Post data from bored API
+// @route   POST /api
+// @access  Public
 router.post('/', async (req, res) => {
   await Activity.deleteMany({});
 
+  // Get 20 records and post them to mongoDB
   for (let index = 0; index < 20; index++) {
     axios
-      .get(`https://www.boredapi.com/api/activity`)
+      .get(http)
       .then((response) => {
         Activity.create(response.data);
       })
@@ -20,6 +26,9 @@ router.post('/', async (req, res) => {
   res.status(200).json({ message: 'successfully updated data' });
 });
 
+// @desc    Get data from database
+// @route   Get /api/
+// @access  Public
 router.get('/', async (req, res) => {
   const type = req.query.type;
   var condition = type ? { type: type } : {};

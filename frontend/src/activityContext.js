@@ -3,27 +3,28 @@ import axios from 'axios';
 
 const activityContext = createContext();
 
-//Contex Provider used to encapsulate only the components that needs the state in this context
+const http = 'http://localhost:5000/api';
+
 export const ActivityProvider = ({ children }) => {
   const [activity, setActivity] = useState({
     data: [],
     isError: false,
     isLoading: false,
-    error: ''
+    error: '',
   });
 
-  //Get latest data from bored API and write to MongoDB
+  // @desc    Sync data with latest records from bored API
   const syncData = () => {
     setActivity.isLoading = true;
 
     axios
-      .post(`http://localhost:8000/api`)
+      .post(http)
       .then((res) => {
         setActivity({
           data: [],
           isError: false,
           isLoading: false,
-          error: ''
+          error: '',
         });
       })
       .catch((err) => {
@@ -31,25 +32,25 @@ export const ActivityProvider = ({ children }) => {
           data: [],
           isError: true,
           isLoading: false,
-          error: 'Somethin went wrong'
+          error: 'Somethin went wrong',
         });
       });
   };
 
-  //Get all records from MongoDB
+  // @desc    Get records from database
   const getData = (type) => {
     setActivity.isLoading = true;
     const condition = type ? { params: { type: type } } : {};
 
     axios
-      .get(`http://localhost:8000/api`, condition)
+      .get(http, condition)
       .then((res) => {
         if (res.count === 0) {
           setActivity({
             data: res.data,
             isError: false,
             isLoading: false,
-            error: 'Not found',
+            error: 'No record found',
           });
         } else {
           setActivity({
