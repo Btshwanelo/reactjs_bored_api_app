@@ -1,10 +1,26 @@
-var express = require('express');
+import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config();
 
-var app = express();
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+import connectDB from './db.js';
+import activityRoutes from './activityRoutes.js';
+
+const port = process.env.PORT || 8000;
+
+connectDB();
+
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/api', activityRoutes);
+
+//not found
+app.use((req, res, next) => {
+  const error = new Error(`Not Found - ${req.originalUrl}`);
+  res.status(404);
+  next(error);
 });
 
-app.listen(5000, function () {
-  console.log('Example app listening on port 3000!');
-});
+app.listen(port, () => console.log(`Server started on port ${port}`));

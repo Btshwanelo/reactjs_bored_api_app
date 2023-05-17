@@ -14,7 +14,7 @@ function App() {
           The Bored API Clone helps you find things to do when you're bored! There's activity type field that help you narrow down your
           results.
         </p>
-        <p>Type of the activity eg: education, recreational, social, diy, charity, cooking, relaxation, music, busywork</p>
+        <span>Type of the activity eg: education, recreational, social, diy, charity, cooking, relaxation, music, busywork</span>
       </div>
       <div>
         <div className='controls'>
@@ -27,25 +27,28 @@ function App() {
         </div>
         {activity.isLoading && <div>Loading</div>}
         {activity.isError && <div>Something went wrong</div>}
-        {!activity.isLoading && !activity.isError &&
-        <div className='results'>
-          <div className='row'>
-            {activity.data.map((item) => (
-              <div
-                className='column'
-                key={item.key}>
-                <div className='card'>
-                  <h3>{item.activity}</h3>
-                  <p>type: {item.type}</p>
-                  <p>participants: {item.participants}</p>
-                  <p>price: {item.price}</p>
-                  <p>link: {item.link}</p>
-                  <p>accessibility: {item.accessibility}</p>
+        {!activity.isLoading && !activity.isError && (
+          <div className='results'>
+            <div className='row'>
+              {activity.data.map((item) => (
+                <div
+                  className='column'
+                  key={item.key}>
+                  <div className='card'>
+                    <h3>{item.activity}</h3>
+                    <p>type: {item.type}</p>
+                    <p>participants: {item.participants}</p>
+                    <p>price: {item.price}</p>
+                    <p>
+                      link: <a href={item.link}>{item.link}</a>
+                    </p>
+                    <p>accessibility: {item.accessibility}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </div>
   );

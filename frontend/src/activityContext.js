@@ -1,4 +1,5 @@
 import { useState, createContext } from 'react';
+import axios from 'axios';
 
 const activityContext = createContext();
 
@@ -23,6 +24,9 @@ export const ActivityProvider = ({ children }) => {
   //Get latest data from bored API and write to MongoDB
   const resetActivity = () => {
     setActivity.isLoading = true;
+
+    axios.get().then().catch();
+
     return setActivity({
       data: [
         {
@@ -32,7 +36,7 @@ export const ActivityProvider = ({ children }) => {
           price: 0,
           link: 'https://en.wikipedia.org/wiki/Multi-factor_authentication',
           key: '1572120',
-          accessibility: 6,
+          accessibility: 0,
         },
       ],
       isError: false,
