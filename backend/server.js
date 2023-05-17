@@ -6,7 +6,7 @@ dotenv.config();
 import connectDB from './db.js';
 import activityRoutes from './activityRoutes.js';
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 connectDB();
 
