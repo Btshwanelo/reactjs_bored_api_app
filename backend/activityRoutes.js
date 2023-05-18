@@ -20,10 +20,10 @@ router.post('/', async (req, res) => {
         Activity.create(response.data);
       })
       .catch((error) => {
-        res.status(401).json({ message: 'Error fetching data' });
+        res.status(404).json({ message: 'Error fetching data' });
       });
   }
-  res.status(200).json({ message: 'successfully updated data' });
+  res.status(201).json({ message: 'successfully updated data' });
 });
 
 // @desc    Get data from database
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
   if (activities) {
     res.status(200).json({ activities, count: activities.length });
   } else {
-    res.status(404).json({ message: 'Activities not found' });
+    res.status(204).json({ message: 'Activities not found' });
   }
 });
 
